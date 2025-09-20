@@ -1,0 +1,5 @@
+SQLAlchemy~=2.0.43
+streamlit~=1.49.1
+pathlib~=1.0.1
+fastapi~=0.116.2
+ollama~=0.5.4
