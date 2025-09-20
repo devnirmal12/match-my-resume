@@ -26,5 +26,4 @@ class Candidate(Base):
     feedback = Column(Text)
     created_at = Column(TIMESTAMP, server_default=func.now())
 
-# Create tables
 Base.metadata.create_all(bind=engine)

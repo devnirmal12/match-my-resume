@@ -11,21 +11,50 @@ import scorer as scorer
 import feedback as feedback
 from app.db_utils import save_candidate
 
-st.set_page_config(page_title="Resume-JD Analyzer", layout="wide")
-st.title("📄 Resume vs Job Description Analyzer")
+st.set_page_config(
+    page_title="Resume-JD Analyzer",
+    page_icon="📄",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-resume_file = st.file_uploader("Upload Resume PDF", type=["pdf"])
-jd_file = st.file_uploader("Upload JD PDF", type=["pdf"])
-candidate_name = st.text_input("Candidate Name")
-candidate_email = st.text_input("Candidate Email")
-location = st.text_input("Location")
-job_role = st.text_input("Job Role")
+with st.sidebar:
+    st.markdown(
+        f"""
+            <div style="text-align:center;">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
+                     width="140">
+            </div>
+            """,
+        unsafe_allow_html=True
+    )
+    st.title("Controls ⚙️")
+    candidate_name = st.text_input("👤 Candidate Name")
+    candidate_email = st.text_input("📧 Email")
+    location = st.text_input("📍 Location")
+    job_role = st.text_input("💼 Job Role")
+    st.markdown("---")
+    st.markdown("Upload your **Resume** and **Job Description** below:")
+
+    resume_file = st.file_uploader("📄 Upload Resume (PDF)", type=["pdf"])
+    jd_file = st.file_uploader("📝 Upload JD (PDF)", type=["pdf"])
+
+st.markdown(
+    """
+    <div style="display:flex; align-items:center; gap:12px;">
+        <img src="https://i.ibb.co/NgcTLtHM/resume-icon.png" width="60">
+        <h1 style="margin:0;">Resume vs Job Description Analyzer</h1>
+    </div>
+    <br>
+    """,
+    unsafe_allow_html=True
+)
 
 UPLOAD_DIR = Path("data")
 resume_path = None
 jd_path = None
 
-if st.button("Analyze") and resume_file and jd_file and candidate_name:
+if st.sidebar.button("🚀 Analyze") and resume_file and jd_file and candidate_name:
     resume_path = UPLOAD_DIR / "resumes" / resume_file.name
     jd_path = UPLOAD_DIR / "jds" / jd_file.name
     resume_path.parent.mkdir(parents=True, exist_ok=True)
@@ -36,20 +65,20 @@ if st.button("Analyze") and resume_file and jd_file and candidate_name:
     with open(jd_path, "wb") as f:
         f.write(jd_file.read())
 
-    st.success("Files uploaded successfully!")
+    st.success("✅ Files uploaded successfully!")
 
-    # Parse PDFs
+
     resume_text = parser.parse_resume(str(resume_path))
     jd_text = parser.parse_jd(str(jd_path))
 
-    # Match & Score
+
     match_data = matcher.keyword_match(resume_text, jd_text)
     score = scorer.weighted_score(match_data)
 
-    # AI Feedback
+
     ai_feedback = feedback.generate_feedback(resume_text, jd_text)
 
-    # Save to DB
+
     save_candidate(
         name=candidate_name,
         email=candidate_email,
@@ -62,10 +91,24 @@ if st.button("Analyze") and resume_file and jd_file and candidate_name:
         feedback=ai_feedback
     )
 
-    st.subheader("🔍 Match Results")
-    st.write(f"**Match Score:** {score}%")
-    st.write("**Matched Keywords:**")
-    st.write(", ".join(match_data["matched_keywords"]))
+    st.markdown("### 🔍 Match Results")
+    col1, col2 = st.columns([1, 2])
 
-    st.subheader("💡 AI Feedback")
-    st.text(ai_feedback)
+    with col1:
+        st.metric("📊 Match Score", f"{score}%")
+    with col2:
+        st.write("**Matched Keywords:**")
+        st.write(", ".join(match_data["matched_keywords"]))
+
+    st.markdown("---")
+    st.markdown("### 💡 AI Feedback")
+    st.info(ai_feedback)
+
+    st.markdown("---")
+    st.markdown(
+        "<p style='text-align:center; color: grey;'>Made with ❤️ using Streamlit & Ollama</p>",
+        unsafe_allow_html=True
+    )
+
+else:
+    st.warning("⬅️ Please fill candidate details & upload both Resume + JD to continue.")
