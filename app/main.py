@@ -5,7 +5,7 @@ from app.parser import parse_resume, parse_jd
 from app.matcher import keyword_match
 from app.scorer import weighted_score
 from app.feedback import generate_feedback
-# from app.db import SessionLocal, Candidate
+
 
 app = FastAPI()
 UPLOAD_DIR = Path("data")
@@ -40,16 +40,3 @@ async def analyze(resume: UploadFile = File(...), jd: UploadFile = File(...)):
         "feedback": feedback
     }
 
-# @app.get("/candidates/")
-# def get_candidates(job_role: str = None, min_score: float = 0, location: str = None):
-#     db = SessionLocal()
-#     query = db.query(Candidate)
-#     if job_role:
-#         query = query.filter(Candidate.job_role == job_role)
-#     if location:
-#         query = query.filter(Candidate.location == location)
-#     if min_score:
-#         query = query.filter(Candidate.match_score >= min_score)
-#     results = query.all()
-#     db.close()
-#     return results
