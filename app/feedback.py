@@ -1,6 +1,6 @@
-# app/feedback.py
 import requests
 
+# Replace with your actual Ollama server URL
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
 def generate_feedback(resume_text: str, jd_text: str) -> str:
@@ -18,13 +18,14 @@ Please provide:
 """
 
     payload = {
-        "model": "mistral",  # or llama2, depending on what you're running
+        "model": "mistral",  # or llama2, depending on your setup
         "prompt": prompt,
         "stream": False
     }
 
     try:
-        response = requests.post(OLLAMA_URL, json=payload)
+        # Increased timeout from 30 to 120 seconds
+        response = requests.post(OLLAMA_URL, json=payload, timeout=600)
         response.raise_for_status()
         return response.json().get("response", "").strip()
     except requests.RequestException as e:
