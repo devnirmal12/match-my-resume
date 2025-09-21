@@ -7,7 +7,6 @@ from app.scorer import weighted_score
 from app.feedback import generate_feedback
 from app.db import SessionLocal, Candidate
 
-
 app = FastAPI()
 UPLOAD_DIR = Path("data")
 
