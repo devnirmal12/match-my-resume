@@ -38,17 +38,19 @@ with st.sidebar:
 
     resume_file = st.file_uploader("📄 Upload Resume (PDF)", type=["pdf"])
     jd_file = st.file_uploader("📝 Upload JD (PDF)", type=["pdf"])
-
 st.markdown(
     """
-    <div style="display:flex; align-items:center; gap:12px;">
-        <img src="https://i.ibb.co/NgcTLtHM/resume-icon.png" width="60">
-        <h1 style="margin:0;">Resume vs Job Description Analyzer</h1>
+    <div style="text-align: center;">
+        <div style="display: inline-flex; align-items: center; gap: 12px;">
+            <img src="https://i.ibb.co/NgcTLtHM/resume-icon.png" width="60">
+            <h1 style="margin: 0;">Resume vs Job Description Analyzer</h1>
+        </div>
     </div>
     <br>
     """,
     unsafe_allow_html=True
 )
+
 
 UPLOAD_DIR = Path("data")
 resume_path = None
