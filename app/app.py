@@ -9,7 +9,7 @@ import parser as parser
 import matcher as matcher
 import scorer as scorer
 import feedback as feedback
-from app.db_utils import save_candidate
+# from app.db_utils import save_candidate
 
 st.set_page_config(
     page_title="Resume-JD Analyzer",
@@ -81,17 +81,17 @@ if st.sidebar.button("🚀 Analyze") and resume_file and jd_file and candidate_n
     ai_feedback = feedback.generate_feedback(resume_text, jd_text)
 
 
-    save_candidate(
-        name=candidate_name,
-        email=candidate_email,
-        location=location,
-        job_role=job_role,
-        resume_path=resume_path,
-        jd_path=jd_path,
-        match_score=score,
-        matched_keywords=match_data["matched_keywords"],
-        feedback=ai_feedback
-    )
+    # save_candidate(
+    #     name=candidate_name,
+    #     email=candidate_email,
+    #     location=location,
+    #     job_role=job_role,
+    #     resume_path=resume_path,
+    #     jd_path=jd_path,
+    #     match_score=score,
+    #     matched_keywords=match_data["matched_keywords"],
+    #     feedback=ai_feedback
+    # )
 
     st.markdown("### 🔍 Match Results")
     col1, col2 = st.columns([1, 2])
