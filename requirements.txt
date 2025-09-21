@@ -1,13 +1,13 @@
-streamlit~=1.49.1
-fastapi~=0.116.2
-uvicorn[standard]~=0.23.3
+streamlit
+fastapi
+uvicorn[standard]
 
-SQLAlchemy~=2.0.43
-psycopg2-binary~=2.9.8
+SQLAlchemy
+psycopg2-binary
 
-PyMuPDF~=1.22.5
-docx2txt~=0.8
+PyMuPDF
+docx2txt
 
-ollama~=0.5.4
+ollama
 
-python-multipart~=0.0.6
+python-multipart
