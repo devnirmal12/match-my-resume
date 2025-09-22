@@ -1,15 +1,20 @@
+# app/main_streamlit.py
 import sys
 from pathlib import Path
 import streamlit as st
+from dotenv import load_dotenv
+import os
 
-PROJECT_ROOT = Path(__file__).parent.parent.resolve()
+# Load .env variables
+load_dotenv()
+
+PROJECT_ROOT = Path(__file__).parent.resolve()
 sys.path.insert(0, str(PROJECT_ROOT))
 
-import parser as parser
-import matcher as matcher
-import scorer as scorer
-import feedback as feedback
-# from app.db_utils import save_candidate
+import parser
+import matcher
+import scorer
+import feedback
 
 st.set_page_config(
     page_title="Resume-JD Analyzer",
@@ -18,14 +23,15 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Sidebar
 with st.sidebar:
     st.markdown(
-        f"""
-            <div style="text-align:center;">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
-                     width="140">
-            </div>
-            """,
+        """
+        <div style="text-align:center;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
+                 width="140">
+        </div>
+        """,
         unsafe_allow_html=True
     )
     st.title("Controls ⚙️")
@@ -35,9 +41,10 @@ with st.sidebar:
     job_role = st.text_input("💼 Job Role")
     st.markdown("---")
     st.markdown("Upload your **Resume** and **Job Description** below:")
-
     resume_file = st.file_uploader("📄 Upload Resume (PDF)", type=["pdf"])
     jd_file = st.file_uploader("📝 Upload JD (PDF)", type=["pdf"])
+
+# Header
 st.markdown(
     """
     <div style="text-align: center;">
@@ -50,7 +57,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
 
 UPLOAD_DIR = Path("data")
 resume_path = None
@@ -69,29 +75,13 @@ if st.sidebar.button("🚀 Analyze") and resume_file and jd_file and candidate_n
 
     st.success("✅ Files uploaded successfully!")
 
-
     resume_text = parser.parse_resume(str(resume_path))
     jd_text = parser.parse_jd(str(jd_path))
-
 
     match_data = matcher.keyword_match(resume_text, jd_text)
     score = scorer.weighted_score(match_data)
 
-
     ai_feedback = feedback.generate_feedback(resume_text, jd_text)
-
-
-    # save_candidate(
-    #     name=candidate_name,
-    #     email=candidate_email,
-    #     location=location,
-    #     job_role=job_role,
-    #     resume_path=resume_path,
-    #     jd_path=jd_path,
-    #     match_score=score,
-    #     matched_keywords=match_data["matched_keywords"],
-    #     feedback=ai_feedback
-    # )
 
     st.markdown("### 🔍 Match Results")
     col1, col2 = st.columns([1, 2])
@@ -108,9 +98,8 @@ if st.sidebar.button("🚀 Analyze") and resume_file and jd_file and candidate_n
 
     st.markdown("---")
     st.markdown(
-        "<p style='text-align:center; color: grey;'>Made with ❤️ using Streamlit & Ollama</p>",
+        "<p style='text-align:center; color: grey;'>Made with ❤️ using Streamlit & OpenAI</p>",
         unsafe_allow_html=True
     )
-
 else:
     st.warning("⬅️ Please fill candidate details & upload both Resume + JD to continue.")
