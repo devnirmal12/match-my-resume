@@ -1,7 +1,8 @@
-import requests
+# app/feedback.py
+import os
+from openai import OpenAI
 
-# Replace with your actual Ollama server URL
-OLLAMA_URL = "http://localhost:11434/api/generate"
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def generate_feedback(resume_text: str, jd_text: str) -> str:
     prompt = f"""
@@ -16,17 +17,12 @@ Please provide:
 2. Missing skills or keywords.
 3. Any general feedback in bullet points.
 """
-
-    payload = {
-        "model": "mistral",  # or llama2, depending on your setup
-        "prompt": prompt,
-        "stream": False
-    }
-
     try:
-        # Increased timeout from 30 to 120 seconds
-        response = requests.post(OLLAMA_URL, json=payload, timeout=600)
-        response.raise_for_status()
-        return response.json().get("response", "").strip()
-    except requests.RequestException as e:
-        return f"Error: {str(e)}"
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7,
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        return f"Error generating feedback: {e}"
