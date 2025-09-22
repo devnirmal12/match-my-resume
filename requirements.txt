@@ -1,5 +1,5 @@
-streamlit
-fastapi
+streamlit~=1.49.1
+fastapi~=0.116.2
 uvicorn[standard]
 
 SQLAlchemy
@@ -7,7 +7,19 @@ SQLAlchemy
 
 PyMuPDF
 docx2txt
-
+openai
 ollama
-
+requests
 python-multipart
+
+pathlib~=1.0.1
+pip~=25.2
+configparser~=7.2.0
+attrs~=25.3.0
+wheel~=0.45.1
+protobuf~=6.31.1
+pyOpenSSL~=25.3.0
+cryptography~=46.0.0
+filelock~=3.19.1
+
+python-dotenv
